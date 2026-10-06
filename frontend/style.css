@@ -168,6 +168,23 @@ body {
     cursor: pointer;
 }
 
+.i-icons{
+    width: 18px;
+    height: 18px;
+}
+
+.search-icon{
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #f4f6f8;
+
+    cursor: pointer;
+}
+
 .user {
     display: flex;
     flex-direction: column;

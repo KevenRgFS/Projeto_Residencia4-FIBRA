@@ -28,15 +28,6 @@ const empresas = [
             "ultimaInteracao": "Ontem, 17:20",
             "status": "ativo"
         },
-        {
-            "id": 2,
-            "nome": "Alimentos Cerrado LTDA.",
-            "setor": "alimentos",
-            "porte": "médio",
-            "score": "72",
-            "ultimaInteracao": "Ontem, 17:20",
-            "status": "ativo"
-        }
 ];
 
 app.get("/api/v1/empresas", (req, res)=>{
