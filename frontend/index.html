@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FIBRA | Hub de Inovação</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                F
+            </div>
+
+            <nav>
+                <a href="#"><i data-lucide="layout-grid"></i></a>
+                <a href="#"><i data-lucide="building-2"></i></a>
+                <a href="#" class="active"><i data-lucide="folder"></i></a>
+                <a href="#"><i data-lucide="chart-no-axes-column"></i></a>
+            </nav>
+
+        </aside>
+
+
+        <!-- ÁREA PRINCIPAL -->
+        <main class="main">
+
+            <!-- CABEÇALHO -->
+            <header class="topbar">
+
+                <div class="brand">
+                    <strong>FIBRA</strong>
+                    <span>| Hub de Inovação</span>
+
+                    <div class="divider"></div>
+
+                    <span>Diretório de Empresas</span>
+                </div>
+
+                <div class="top-actions">
+
+                    <input
+                        type="text"
+                        placeholder="🔍  Buscar empresas, programas, CNPJ..."
+                    >
+
+                    <button class="icon-button">⚙</button>
+                    <button class="icon-button">♧</button>
+
+                    <div class="user">
+                        <strong>Roberto Silva</strong>
+                        <small>Analista Sênior</small>
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- CONTEÚDO -->
+            <div class="content">
+
+                <!-- FILTROS -->
+                <section class="filters">
+
+                    <select>
+                        <option>Setor: Todos</option>
+                        <option>Metalurgia</option>
+                        <option>Alimentos</option>
+                        <option>Construção</option>
+                        <option>Química</option>
+                    </select>
+
+                    <select>
+                        <option>Porte: Todos</option>
+                        <option>Grande</option>
+                        <option>Médio</option>
+                        <option>Pequeno</option>
+                    </select>
+
+                    <select>
+                        <option>Pilar: Todos</option>
+                        <option>Inovação</option>
+                        <option>Indústria</option>
+                    </select>
+
+                    <div class="score-filter">
+                        <span>Score:</span>
+                        <strong>0 - 100</strong>
+                        <div class="score-line"></div>
+                    </div>
+
+                    <button id="atualizarEmpresas" class="clear-button">
+                        Atualizar Empresas
+                    </button>
+
+                    <button class="clear-button">
+                        Limpar Filtros
+                    </button>
+
+                </section>
+
+
+                <!-- TABELA -->
+                <section class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Razão Social</th>
+                                <th>Setor</th>
+                                <th>Porte</th>
+                                <th>Score Hub</th>
+                                <th>Última Interação</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="empresas">
+                        </tbody>
+
+                    </table>
+
+
+                    <!-- RODAPÉ DA TABELA -->
+                    <div class="table-footer">
+
+                        <span>
+                            Exibindo <strong id="contador">0</strong> empresas
+                        </span>
+
+                        <div class="pagination">
+                            <button>‹</button>
+                            <button class="selected">1</button>
+                            <button>›</button>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,448 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    color: #263445;
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 64px;
+    background: #16418f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 18px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+
+    background: #079bd3;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    margin-bottom: 25px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;               /* era 8px: mais espaço entre os ícones */
+}
+
+.sidebar nav a {
+    width: 44px;             /* era 40px */
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+    color: rgba(217, 230, 255, 0.65);   /* azul claro mais apagado, como na imagem */
+
+    border-radius: 10px;     /* cantos mais arredondados */
+    transition: background 0.2s, color 0.2s;
+}
+
+/* NOVO: tamanho e espessura do ícone Lucide */
+.sidebar nav a svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.75;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: #079bd3;
+    color: white;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    flex: 1;
+}
+
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+    height: 56px;
+    background: white;
+    border-bottom: 1px solid #dce1e7;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 24px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.brand strong {
+    font-size: 17px;
+    color: #1c3155;
+}
+
+.brand span {
+    color: #687387;
+}
+
+.divider {
+    height: 25px;
+    width: 1px;
+    background: #d5dae1;
+    margin: 0 12px;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-actions input {
+    width: 300px;
+    height: 34px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #f4f6f8;
+
+    padding: 0 12px;
+
+    outline: none;
+}
+
+.icon-button {
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #f4f6f8;
+
+    cursor: pointer;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.user strong {
+    font-size: 12px;
+}
+
+.user small {
+    font-size: 10px;
+    color: #778195;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    padding: 24px;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters {
+    background: white;
+
+    border: 1px solid #dce2e9;
+    border-radius: 14px;
+
+    min-height: 54px;
+
+    padding: 10px 16px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+}
+
+.filters select {
+    height: 32px;
+
+    border: 1px solid #d5dce5;
+    border-radius: 8px;
+
+    background: white;
+
+    padding: 0 10px;
+
+    color: #344054;
+}
+
+.score-filter {
+    height: 32px;
+
+    border: 1px solid #d5dce5;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 10px;
+
+    gap: 5px;
+
+    font-size: 12px;
+}
+
+.score-filter span {
+    color: #586579;
+}
+
+.score-filter strong {
+    color: #263445;
+}
+
+.score-line {
+    width: 60px;
+    height: 3px;
+
+    background: #079bd3;
+
+    margin-left: 5px;
+    border-radius: 4px;
+}
+
+.clear-button {
+    margin-left: auto;
+
+    height: 32px;
+
+    background: white;
+
+    border: 1px solid #d5dce5;
+    border-radius: 8px;
+
+    padding: 0 12px;
+
+    color: #475467;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+    background: white;
+
+    border: 1px solid #dce2e9;
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    height: 48px;
+}
+
+th {
+    text-align: left;
+
+    font-size: 11px;
+
+    color: #526074;
+
+    font-weight: 600;
+
+    padding: 0 17px;
+
+    border-bottom: 1px solid #dce2e9;
+}
+
+td {
+    height: 38px;
+
+    padding: 0 17px;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #e0e5eb;
+
+    color: #354052;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+.score {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.score.high {
+    background: #dff4e3;
+    color: #36a33a;
+}
+
+.score.medium {
+    background: #dff2f8;
+    color: #1685ad;
+}
+
+.score.low {
+    background: #e3f1fa;
+    color: #087bb0;
+}
+
+.score.risk {
+    background: #ff4f12;
+    color: white;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+    display: inline-block;
+
+    padding: 4px 9px;
+
+    border-radius: 10px;
+
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.status.active {
+    background: #4bae36;
+    color: white;
+}
+
+.status.inactive {
+    background: #16418f;
+    color: white;
+}
+
+.status.risk-status {
+    background: #ffe4dc;
+    color: #ed4b1d;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.table-footer {
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 17px;
+
+    font-size: 11px;
+
+    color: #657184;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination button {
+    width: 26px;
+    height: 26px;
+
+    background: white;
+
+    border: 1px solid #d5dce5;
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    color: #475467;
+}
+
+.pagination button.selected {
+    background: #079bd3;
+    color: white;
+    border-color: #079bd3;
+}
