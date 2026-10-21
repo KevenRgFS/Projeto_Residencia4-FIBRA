@@ -1,7 +1,16 @@
 import {Search} from "lucide-react";
 import {Bolt} from "lucide-react";
 import {BellRing} from "lucide-react";
+import { useLocation } from "react-router-dom";
+
+const TITULOS = {
+    "/": "Painel Geral",
+    "/empresas": "Diretório de Empresas",
+    "/base-de-dados": "Base de Dados",
+};
 export function Header(){
+
+const { pathname } = useLocation();
 
 return(
 
@@ -13,7 +22,7 @@ return(
 
             <div class="divider"></div>
 
-            <span>Diretório de Empresas</span>
+            <span>{TITULOS[pathname] ?? ""}</span>
         </div>
 
         <div class="top-actions">

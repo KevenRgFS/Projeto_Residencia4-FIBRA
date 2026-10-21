@@ -16,7 +16,7 @@ return(
                     <NavLink to="/"><LayoutGrid /></NavLink>
                     <NavLink to="/perfilEmp"><Building2 /></NavLink>
                     <NavLink to="/empresas"><Folder /></NavLink>
-                    <NavLink to="/alimentacao"><ChartNoAxesColumn /></NavLink>
+                    <NavLink to="/base-de-dados"><ChartNoAxesColumn /></NavLink>
                 </nav>
 
             </aside>
