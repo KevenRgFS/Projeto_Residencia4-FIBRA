@@ -46,4 +46,10 @@ O score atual é uma regra determinística inicial, não um modelo de IA validad
 
 ## Verificação
 
-Rode `npm test` na pasta `backend`. As migrations são idempotentes e podem ser aplicadas com `npm run migrate` após configurar o banco.
+Na pasta `backend`, rode `npm test` para validar rotas e regras sem exigir um banco PostgreSQL ativo. Para verificar a conexão real com o banco configurado em `.env`, rode:
+
+```powershell
+npm run test:db
+```
+
+Esse teste executa `SELECT 1` e falha caso `DATABASE_URL` esteja ausente ou o PostgreSQL não esteja acessível. Ele não altera dados nem verifica tabelas. Para conferir também o schema, aplique as migrations com `npm run migrate`; depois, inicie a API e consulte `http://localhost:3000/health`, que deve indicar `status: ok` e `database: connected`.
