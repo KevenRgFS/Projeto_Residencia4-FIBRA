@@ -1,4 +1,4 @@
-export function Filtros({ onAtualizar }) {
+export function Filtros({ onAtualizar, onCadastrar }) {
 
     return (
         <section className="filters">
@@ -33,10 +33,13 @@ export function Filtros({ onAtualizar }) {
                 Atualizar Empresas
             </button>
 
+            <button type="button" className="primary-button" onClick={onCadastrar}>
+                Cadastrar empresa
+            </button>
+
             <button type="button" className="clear-button">
                 Limpar Filtros
             </button>
         </section>
     );
 }
-

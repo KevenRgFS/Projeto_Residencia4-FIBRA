@@ -8,7 +8,8 @@
     "dev": "nodemon app.js",
     "migrate": "node src/migrate.js",
     "create-user": "node src/create-user.js",
-    "test": "node --test"
+    "test": "node --test test/api.test.js test/engagement.test.js test/validation.test.js",
+    "test:db": "node --test test/db.integration.test.js"
   },
   "keywords": [],
   "author": "",

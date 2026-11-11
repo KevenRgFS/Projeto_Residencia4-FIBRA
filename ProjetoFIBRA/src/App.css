@@ -304,6 +304,89 @@ body {
     cursor: pointer;
 }
 
+.primary-button {
+    min-height: 32px;
+    border: 1px solid #16418f;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #16418f;
+    color: white;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary-button:hover:not(:disabled) {
+    background: #123675;
+}
+
+.primary-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.empresa-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 18px;
+    border: 1px solid #dce2e9;
+    border-radius: 14px;
+    background: white;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+}
+
+.empresa-form h2 {
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.empresa-form p,
+.empresa-feedback {
+    color: #526074;
+    font-size: 13px;
+}
+
+.empresa-form label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.empresa-form input {
+    width: min(100%, 520px);
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #d5dce5;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.empresa-form input:focus {
+    outline: 2px solid rgba(7, 155, 211, 0.25);
+    border-color: #079bd3;
+}
+
+.empresa-form-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.empresa-form-acoes .clear-button {
+    margin-left: 0;
+}
+
+.empresa-feedback {
+    margin: 0 0 12px;
+}
+
+.empresa-feedback-erro {
+    color: #b42318;
+}
+
 
 /* =========================
    TABLE
@@ -469,4 +552,17 @@ tbody tr:hover {
     background: #079bd3;
     color: white;
     border-color: #079bd3;
+}
+
+@media (max-width: 760px) {
+    .filters {
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    .filters select,
+    .filters button {
+        flex: 1 1 140px;
+        margin-left: 0;
+    }
 }
