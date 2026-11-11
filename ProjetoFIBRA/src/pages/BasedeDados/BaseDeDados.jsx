@@ -19,7 +19,7 @@ const ABAS = [
   { id: "externa", rotulo: "Conectar fonte externa" },
 ];
 
-export function BaseDeDados() {
+export function BasedeDados() {
   const [aba, setAba] = useState("upload");
   const [classificacao, setClassificacao] = useState(classificacaoInicial);
   const [fila, setFila] = useState([]);
@@ -28,7 +28,7 @@ export function BaseDeDados() {
   const [processando, setProcessando] = useState(false);
   const [erros, setErros] = useState([]);
 
-  // Ao abrir a página, busca a fila no serviço (hoje: dados de exemplo).
+  // Ao abrir a página, aqui se fará uma busca a fila no serviço (hoje: dados de exemplo).
   useEffect(() => {
     let ativo = true;
     listarFila()
@@ -57,7 +57,7 @@ export function BaseDeDados() {
     return () => { ativo = false; };
   }, []);
 
-  // Itens que ainda vão ser processados (novos ou que deram erro).
+  // Itens que ainda vão ser processados, sendo novos ou que deram erro.
   const pendentes = fila.filter((i) => i.status === "na_fila" || i.status === "erro");
 
   function mudarClassificacao(campo, valor) {

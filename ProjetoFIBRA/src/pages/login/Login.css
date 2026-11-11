@@ -1,0 +1,157 @@
+.login {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 16px 32px;
+  color-scheme: light;
+  text-align: left;
+  background: linear-gradient(180deg, #f5f6f8 0%, #ebecee 24%, #f4f5f7 42%, #f4f5f7 100%);
+}
+
+.login-cartao {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 354px;
+  padding: 44px 46px 24px;
+  background: #fff;
+  border: 1px solid #cfe3ee;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(40, 110, 160, 0.12);
+}
+
+/* ---------- título ---------- */
+.login .login-marca {
+  margin: 12px 0 0;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
+  color: #1b2a4e;
+}
+
+.login-subtitulo {
+  margin: 14px 0 34px;
+  font-size: 22px;
+  line-height: 1.2;
+  text-align: center;
+  color: #4c5b78;
+}
+
+/* ---------- campos ---------- */
+.login-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #16192c;
+}
+
+.login-campo:last-of-type { margin-bottom: 8px; }
+
+.login-campo input {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dde1e6;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  color: #16233a;
+}
+
+.login-campo input::placeholder { color: #7b8493; }
+.login-campo input:focus { outline: 2px solid #8fd3ee; border-color: #8fd3ee; }
+
+/* ---------- links ---------- */
+.login-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0a8fc9;
+  cursor: pointer;
+}
+.login-link:hover { text-decoration: underline; }
+
+.login-aviso {
+  margin: 14px 0 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #ffe9e3;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b83a0a;
+}
+
+/* ---------- botões ---------- */
+.login-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 40px;
+  margin-top: 30px;
+  border: 1px solid #d9262c;
+  border-radius: 8px;
+  background: #ff3b3f;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+.login-google:hover { background: #f02d32; }
+
+.google-logo {
+  box-sizing: content-box;
+  width: 16px;
+  height: 16px;
+  padding: 3px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.login-entrar {
+  display: block;
+  min-width: 84px;
+  height: 40px;
+  margin: 58px auto 0;
+  padding: 0 22px;
+  border: 2px solid #1d4f91;
+  border-radius: 8px;
+  background: #4aa832;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+.login-entrar:hover { background: #439b2b; }
+.login-entrar:disabled { opacity: 0.6; cursor: wait; }
+
+.login-acesso {
+  display: block;
+  margin: 12px auto 0;
+  color: #16418f;
+  text-shadow: 0 1px 4px rgba(10, 143, 201, 0.45);
+}
+
+/* ---------- faixa colorida no rodapé ---------- */
+.login-faixa {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #16418f 0 25%, #4aa832 25% 50%, #ea4f12 50% 75%, #6cc3bc 75% 100%);
+}

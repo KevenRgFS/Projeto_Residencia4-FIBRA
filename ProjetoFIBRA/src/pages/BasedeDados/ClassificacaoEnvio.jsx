@@ -1,9 +1,5 @@
 import { pilares, tiposDeDado } from "../../data/baseDeDados";
 
-// Formulário "Classificação do envio".
-// É um formulário controlado: os valores vivem na página (valores)
-// e cada campo avisa a mudança com onChange(campo, valor).
-// "empresas" é a lista [{ id, nome }] que a página busca no banco.
 export function ClassificacaoEnvio({ empresas, valores, onChange }) {
   function campo(nome) {
     return {
