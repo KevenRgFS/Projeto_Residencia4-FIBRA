@@ -3,7 +3,7 @@ import { Login } from "./pages/login/Login";
 import { RotaProtegida } from "./components/RotaProtegida";
 import { PainelGeral } from "./pages/PainelGeral/PainelGeral";
 import { DiretorioEmpresas } from "./pages/DiretorioEmpresas";
-import { BasedeDados } from "./pages/BaseDeDados/BasedeDados";
+import { BasedeDados } from "./pages/BasedeDados/BasedeDados";
 import { Layout } from "./components/Layout";
 import { Configuracoes } from "./pages/Configuracoes/Configuracoes";
 import './App.css'
