@@ -30,17 +30,19 @@ export function Table({ empresas }) {
         <tbody>
           {empresas.map((e) => (
             <tr key={e.id}>
-              <td>{e.nome}</td>
-              <td>{e.setor}</td>
-              <td>{e.porte}</td>
+              <td>{e.nome || "—"}</td>
+              <td>{e.setor || "—"}</td>
+              <td>{e.porte || "—"}</td>
               <td>
-                <span className={`score ${classeDoScore(e.score)}`}>{e.score}</span>
+                {Number.isFinite(e.score)
+                  ? <span className={`score ${classeDoScore(e.score)}`}>{e.score}</span>
+                  : "—"}
               </td>
-              <td>{e.ultimaInteracao}</td>
+              <td>{e.ultimaInteracao || "—"}</td>
               <td>
-                <span className={`status ${STATUS[e.status].classe}`}>
-                  {STATUS[e.status].texto}
-                </span>
+                {STATUS[e.status]
+                  ? <span className={`status ${STATUS[e.status].classe}`}>{STATUS[e.status].texto}</span>
+                  : "—"}
               </td>
               <td></td>
             </tr>

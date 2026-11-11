@@ -34,6 +34,20 @@ export async function listarEmpresas() {
   return data.map((linha) => ({ id: linha.Id_empresa, nome: linha.Nome_Empresa }));
 }
 
+export async function cadastrarEmpresa(nome) {
+  const nomeNormalizado = nome.trim();
+  if (!nomeNormalizado) throw new Error("Informe o nome da empresa.");
+
+  const { data, error } = await supabase
+    .from("empresa")
+    .insert({ Nome_Empresa: nomeNormalizado })
+    .select("Id_empresa, Nome_Empresa")
+    .single();
+
+  if (error) throw new Error(`Não foi possível cadastrar a empresa: ${error.message}`);
+  return { id: data.Id_empresa, nome: data.Nome_Empresa };
+}
+
 export async function listarFila() {
   const { data, error } = await supabase
     .from(TABELA)
