@@ -1,4 +1,4 @@
-import { AlterarSenha } from "./alterarSenha";
+import { AlterarSenha } from "./AlterarSenha";
 import {DuasEtapas} from "./DuasEtapas";
 import {SessoesAtivas } from "./SessoesAtivas";
 

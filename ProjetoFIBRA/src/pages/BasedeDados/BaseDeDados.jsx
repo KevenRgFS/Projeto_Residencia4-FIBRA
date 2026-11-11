@@ -11,7 +11,7 @@ import {
   processarItens,
   limparFila,
 } from "../../services/baseDadosService";
-import "./BasedeDados.css";
+import "./BaseDeDados.css";
 
 const ABAS = [
   { id: "upload", rotulo: "Upload de arquivos" },
