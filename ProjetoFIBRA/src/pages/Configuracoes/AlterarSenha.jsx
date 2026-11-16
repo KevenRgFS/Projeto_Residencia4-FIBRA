@@ -3,7 +3,7 @@ import {useState} from "react";
 export function AlterarSenha() {
 
     const [form, setForm] = useState({"senha_atual": "", "nova_senha": "", "confirma_senha": ""});
-    const [aviso, setAviso] = useState(null);
+    //const [aviso, setAviso] = useState(null);
 
     function alterar(campo, valor) {
         setForm((atual) => ({ ...atual, [campo]: valor }));

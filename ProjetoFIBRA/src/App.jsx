@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Login } from "./pages/login/Login";
 import { RotaProtegida } from "./components/RotaProtegida";
 import { PainelGeral } from "./pages/PainelGeral/PainelGeral";
+import { Perfil } from "./pages/Perfil/Perfil";
 import { DiretorioEmpresas } from "./pages/DiretorioEmpresas";
 import { BasedeDados } from "./pages/BasedeDados/BaseDeDados";
 import { Layout } from "./components/Layout";
@@ -19,6 +20,7 @@ function App() {
           <Route element={<RotaProtegida />}>
             <Route element={<Layout />}>
               <Route path="/painel" element={<PainelGeral />} />
+              <Route path="/perfil" element={<Perfil/>} />
               <Route path="/empresas" element={<DiretorioEmpresas />} />
               <Route path="/base-de-dados" element={<BasedeDados />} />
               <Route path="/configuracoes" element={<Configuracoes />} />
