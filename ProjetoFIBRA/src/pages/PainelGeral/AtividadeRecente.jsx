@@ -9,8 +9,9 @@ export function AtividadeRecente({ itens }) {
       </div>
 
       <ul className="linha-tempo">
-        {itens.map((item) => (
-          <li key={item.empresa}>
+        {itens.map((item, index) => (
+          <li key={item.id ?? index}>
+
             <strong>{item.empresa}</strong>
             <p>
               {item.descricao}

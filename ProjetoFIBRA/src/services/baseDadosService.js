@@ -27,12 +27,13 @@ function nomeSeguro(nome) {
 export async function listarEmpresas() {
   const { data, error } = await supabase
     .from("empresa")
-    .select("Id_empresa, Nome_Empresa")
-    .order("Nome_Empresa", { ascending: true });
+    .select("id_empresa, nome_empresa")
+    .order("nome_empresa", { ascending: true });
 
   if (error) throw new Error(`Não foi possível carregar as empresas: ${error.message}`);
-  return data.map((linha) => ({ id: linha.Id_empresa, nome: linha.Nome_Empresa }));
+  return data.map((linha) => ({ id: linha.id_empresa, nome: linha.nome_empresa }));
 }
+
 
 export async function listarFila() {
   const { data, error } = await supabase

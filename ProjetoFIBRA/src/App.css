@@ -8,6 +8,7 @@ body {
     font-family: Arial, sans-serif;
     background: #f5f7fa;
     color: #263445;
+    overflow-x: hidden;
 }
 
 
@@ -243,6 +244,9 @@ body {
     margin-bottom: 18px;
 
     box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .filters select {

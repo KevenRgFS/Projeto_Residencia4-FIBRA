@@ -42,15 +42,21 @@ export function GraficoPilares({ dados }) {
 
             <div className="grupos">
               {dados.map((d) => (
-                <div className="grupo" key={d.setor}>
-                  {PILARES.map((p) => (
-                    <span
-                      key={p.chave}
-                      className="barra"
-                      style={{ height: `${d[p.chave]}%`, background: p.cor }}
-                      title={`${p.nome}: ${d[p.chave]}%`}
-                    />
-                  ))}
+                <div key={d.setor} className="grupo">
+                  {PILARES.map((p) => {
+                    const valor = d[p.chave] || 0;
+                    return (
+                      <div
+                        key={p.chave}
+                        className="barra"
+                        title={`${d.setorCompleto || d.setor} · ${p.nome}: ${valor}%`}
+                        style={{
+                          height: `${valor}%`,
+                          background: p.cor,
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -58,7 +64,9 @@ export function GraficoPilares({ dados }) {
 
           <div className="rotulos">
             {dados.map((d) => (
-              <span key={d.setor}>{d.setor}</span>
+              <span key={d.setor} title={d.setorCompleto || d.setor}>
+                {d.setor}
+              </span>
             ))}
           </div>
         </div>
