@@ -1,0 +1,36 @@
+.sidebar-sair {
+  position: sticky;
+  bottom: 20px;
+  margin-top: auto;
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(217, 230, 255, 0.65);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-sair svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.75;
+}
+
+.sidebar-sair:hover {
+  background: #ea4f12;
+  color: #fff;
+}
+
+.sidebar-sair:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}

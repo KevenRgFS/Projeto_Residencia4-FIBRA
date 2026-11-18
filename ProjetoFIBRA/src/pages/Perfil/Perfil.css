@@ -1,0 +1,127 @@
+.perfil {
+  --ciano: #079bd3;
+  --azul-escuro: #16418f;
+  --laranja: #ea4f12;
+  --borda: #dce2e9;
+  --texto-suave: #6b7a8c;
+  --texto-forte: #16233a;
+
+  min-height: 560px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  text-align: left;
+}
+
+.perfil h2,
+.perfil h3 {
+  margin: 0;
+  font-family: inherit;
+  letter-spacing: 0;
+  color: var(--texto-forte);
+}
+
+/* ---------- cartão do topo ---------- */
+.perfil-cartao {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+}
+
+.perfil-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--ciano);
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+.perfil-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.perfil-resumo { flex: 1; min-width: 0; }
+.perfil .perfil-resumo h2 { font-size: 18px; font-weight: 700; }
+.perfil-resumo p { margin: 4px 0 0; font-size: 13px; color: #4a5a6e; }
+.perfil-resumo small { display: block; margin-top: 4px; font-size: 11px; color: var(--texto-suave); }
+
+/* ---------- botões ---------- */
+.perfil-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.perfil-contorno { background: #fff; border-color: #d5dce5; color: var(--texto-forte); }
+.perfil-primario { background: var(--azul-escuro); color: #fff; }
+.perfil-cancelar { background: var(--laranja); color: #fff; }
+.perfil-botao:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- informações pessoais ---------- */
+.perfil-informacoes { margin-top: 24px; }
+.perfil .perfil-informacoes h3 { font-size: 16px; font-weight: 600; }
+
+.perfil-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 14px;
+  margin-top: 14px;
+}
+
+.perfil-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--texto-forte);
+}
+
+.perfil-campo input,
+.perfil-campo select {
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e1e6ec;
+  border-radius: 8px;
+  background: #f3f5f8;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--texto-forte);
+}
+.perfil-campo input:focus,
+.perfil-campo select:focus { outline: 2px solid #8fd3ee; background: #fff; }
+
+.perfil-acoes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* ---------- avisos ---------- */
+.perfil-aviso { margin: 0 0 16px; padding: 10px 14px; border-radius: 8px; font-size: 12px; }
+.perfil-aviso.erro { background: #ffe9e3; color: #b83a0a; }
+.perfil-aviso.ok { background: #e3f5dc; color: #2f7d1a; }
+.perfil-vazio { margin: 0; font-size: 13px; color: var(--texto-suave); }
+
+@media (max-width: 900px) {
+  .perfil-grade { grid-template-columns: minmax(0, 1fr); }
+  .perfil-cartao { flex-wrap: wrap; }
+}

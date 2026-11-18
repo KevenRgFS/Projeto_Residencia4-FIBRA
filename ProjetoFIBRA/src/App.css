@@ -8,6 +8,7 @@ body {
     font-family: Arial, sans-serif;
     background: #f5f7fa;
     color: #263445;
+    overflow-x: hidden;
 }
 
 
@@ -28,11 +29,14 @@ body {
 .sidebar {
     width: 64px;
     background: #16418f;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 18px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
 }
 
 .logo {
@@ -69,7 +73,12 @@ body {
 
     text-decoration: none;
     color: rgba(217, 230, 255, 0.65);   /* azul claro mais apagado, como na imagem */
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
 
+    background-color: transparent;
     border-radius: 10px;     /* cantos mais arredondados */
     transition: background 0.2s, color 0.2s;
 }
@@ -102,15 +111,16 @@ body {
 ========================= */
 
 .topbar {
-    height: 56px;
+    height: 70px;
     background: white;
     border-bottom: 1px solid #dce1e7;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .brand {
@@ -163,14 +173,15 @@ body {
     border: none;
     border-radius: 7px;
 
+    color: #000;
     background: #f4f6f8;
 
     cursor: pointer;
 }
 
 .i-icons{
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
 .search-icon{
@@ -180,6 +191,7 @@ body {
     border: none;
     border-radius: 7px;
 
+    color: #000;
     background: #f4f6f8;
 
     cursor: pointer;
@@ -189,14 +201,15 @@ body {
     display: flex;
     flex-direction: column;
     margin-left: 5px;
+    color:#000;
 }
 
 .user strong {
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .user small {
-    font-size: 10px;
+    font-size: 12px;
     color: #778195;
 }
 
@@ -231,6 +244,9 @@ body {
     margin-bottom: 18px;
 
     box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .filters select {
