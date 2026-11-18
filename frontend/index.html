@@ -110,6 +110,22 @@
 
                 </section>
 
+                <section class="import-container" aria-labelledby="import-title">
+                    <div>
+                        <h2 id="import-title">Alimentar base de dados</h2>
+                        <p>Envie uma planilha XLSX ou CSV para cadastrar ou atualizar empresas.</p>
+                    </div>
+                    <form id="importarPlanilha">
+                        <label for="tokenImportacao">Token de acesso</label>
+                        <input id="tokenImportacao" type="password" autocomplete="off" required placeholder="Token de acesso da API">
+                        <label for="arquivoPlanilha">Planilha (XLSX ou CSV)</label>
+                        <input id="arquivoPlanilha" type="file" accept=".xlsx,.csv" required>
+                        <button type="submit" class="clear-button">Enviar para o banco</button>
+                    </form>
+                    <p id="resultadoImportacao" role="status" aria-live="polite"></p>
+                    <small>Colunas aceitas: Nome ou Razão Social, CNPJ, Setor, Porte, CNAE, Email, Telefone, Responsável, Tipo, Sindicato, Funcionários, Situação e Potencial. Nome/Razão Social é obrigatório.</small>
+                </section>
+
 
                 <!-- TABELA -->
                 <section class="table-container">

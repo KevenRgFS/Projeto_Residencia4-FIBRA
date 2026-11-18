@@ -5,8 +5,8 @@ API REST em Express e PostgreSQL para empresas, ações, participações, intera
 ## Executar
 
 1. Instale uma instância PostgreSQL e crie um banco vazio.
-2. Copie `.env.example` para `.env` e preencha `DATABASE_URL` e `JWT_SECRET`.
-3. Na pasta `backend`, rode `npm install` e `npm run migrate`.
+2. Copie `.env.example` para `.env` e preencha `DATABASE_URL` e `JWT_SECRET`. Para usar o Supabase, copie a connection string PostgreSQL em **Project Settings → Database → Connection string** para `DATABASE_URL` e defina `DATABASE_SSL=true`. Mantenha a senha apenas no `.env` local; não a envie ao repositório.
+3. Na pasta `backend`, rode `npm install` e `npm run migrate`. A migration cria as tabelas no banco apontado por `DATABASE_URL`; com a URL do Supabase, elas serão criadas no projeto Supabase.
 4. Crie o primeiro usuário definindo `USER_NAME`, `USER_EMAIL` e `USER_PASSWORD` no ambiente e rode `npm run create-user`. A senha precisa ter pelo menos 12 caracteres. Para perfil `empresa`, informe também `USER_COMPANY_ID`.
 5. Rode `npm run dev`. A API fica em `http://localhost:3000`; `GET /health` verifica banco e serviço.
 
@@ -26,6 +26,7 @@ API REST em Express e PostgreSQL para empresas, ações, participações, intera
 - `GET /api/v1/dashboard/overview`, com filtros de data `inicio` e `fim`.
 - `GET /api/v1/insights` devolve alertas de alto potencial sem participação nos últimos seis meses e pendências de qualidade de dados.
 - `GET /api/v1/sincronizacao` e `POST /api/v1/sincronizacao/hubspot` (admin).
+- `POST /api/v1/empresas/importacao` recebe planilha XLSX ou CSV e grava as empresas no PostgreSQL configurado em `DATABASE_URL` (incluindo Supabase).
 
 Exemplo de participação:
 
