@@ -4,6 +4,7 @@ import { ClassificacaoEnvio } from "./ClassificacaoEnvio";
 import { FilaProcessamento } from "./FilaProcessamento";
 import { classificacaoInicial } from "../../data/baseDeDados";
 import { validarArquivo } from "../../utils/arquivos";
+import { HistoricoEnvios } from "./HistoricoEnvios";
 import {
   listarFila,
   listarEmpresas,
@@ -19,6 +20,7 @@ const ABAS = [
   { id: "externa", rotulo: "Conectar fonte externa" },
 ];
 
+
 export function BasedeDados() {
   const [aba, setAba] = useState("upload");
   const [classificacao, setClassificacao] = useState(classificacaoInicial);
@@ -27,8 +29,8 @@ export function BasedeDados() {
   const [carregando, setCarregando] = useState(true);
   const [processando, setProcessando] = useState(false);
   const [erros, setErros] = useState([]);
+  const [ historicoAberto, setHistoricoAberto] = useState(false);
 
-  // Ao abrir a página, aqui se fará uma busca a fila no serviço (hoje: dados de exemplo).
   useEffect(() => {
     let ativo = true;
     listarFila()
@@ -44,7 +46,6 @@ export function BasedeDados() {
     return () => { ativo = false; };
   }, []);
 
-  // Busca as empresas para o campo "Empresa vinculada".
   useEffect(() => {
     let ativo = true;
     listarEmpresas()
@@ -57,14 +58,12 @@ export function BasedeDados() {
     return () => { ativo = false; };
   }, []);
 
-  // Itens que ainda vão ser processados, sendo novos ou que deram erro.
   const pendentes = fila.filter((i) => i.status === "na_fila" || i.status === "erro");
 
   function mudarClassificacao(campo, valor) {
     setClassificacao((atual) => ({ ...atual, [campo]: valor }));
   }
 
-  // Troca um item da fila pela versão atualizada.
   function atualizarItem(itemNovo) {
     setFila((atual) => atual.map((i) => (i.id === itemNovo.id ? itemNovo : i)));
   }
@@ -124,8 +123,7 @@ export function BasedeDados() {
           </div>
 
           <div className="base-dados-acoes">
-            {/* TODO: abrir a tela/modal de histórico de envios */}
-            <button type="button" className="botao-contorno">Ver histórico</button>
+            <button type="button" className="botao-contorno" onClick={() => setHistoricoAberto(true)}>Ver histórico</button>
             <button
               type="button"
               className="botao-primario"
@@ -172,6 +170,7 @@ export function BasedeDados() {
           <FilaProcessamento itens={fila} carregando={carregando} onLimpar={limpar} />
         </div>
       </div>
+      <HistoricoEnvios aberto={historicoAberto} onFechar={() => setHistoricoAberto(false)} />
     </section>
   );
 }

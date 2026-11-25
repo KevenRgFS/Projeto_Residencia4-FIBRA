@@ -1,4 +1,4 @@
-export const EXTENSOES_PERMITIDAS = ["pdf", "docx", "xlsx", "csv"];
+export const EXTENSOES_PERMITIDAS = ["xlsx", "csv"];
 export const TAMANHO_MAXIMO_MB = 25;
 
 export function validarArquivo(arquivo) {
