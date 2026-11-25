@@ -5,7 +5,7 @@ export function validarArquivo(arquivo) {
   const extensao = arquivo.name.split(".").pop().toLowerCase();
 
   if (!EXTENSOES_PERMITIDAS.includes(extensao)) {
-    return `"${arquivo.name}": formato não aceito (use PDF, DOCX, XLSX ou CSV).`;
+    return `"${arquivo.name}": formato nÃ£o aceito (use XLSX ou CSV).`;
   }
   if (arquivo.size > TAMANHO_MAXIMO_MB * 1024 * 1024) {
     return `"${arquivo.name}": passa de ${TAMANHO_MAXIMO_MB} MB.`;
@@ -22,3 +22,4 @@ export function formatarTamanho(bytes) {
   }
   return `${Math.round(bytes / 1024)} KB`;
 }
+
