@@ -11,9 +11,9 @@ const pool = require("../src/db");
 /**
  * Função auxiliar para gerar um token JWT válido de administrador para os testes
  */
-function gerarTokenAdmin() {
+function gerarToken(role = "admin") {
     return jwt.sign(
-        { id: 1, role: "admin", name: "Admin Teste" },
+        { id: 1, role, name: "Usuário Teste" },
         process.env.JWT_SECRET,
         { issuer: "fibra-api", audience: "fibra-platform", expiresIn: "1h" }
     );
@@ -27,12 +27,10 @@ async function iniciarServidor(context) {
     context.after(() => server.close());
     await new Promise((resolve) => server.once("listening", resolve));
     const baseUrl = `http://127.0.0.1:${server.address().port}`;
-    const token = gerarTokenAdmin();
-
-    async function requisitar(caminho, { metodo = "POST", body, autenticado = true } = {}) {
+    async function requisitar(caminho, { metodo = "POST", body, autenticado = true, role = "admin" } = {}) {
         const headers = { "Content-Type": "application/json" };
         if (autenticado) {
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = `Bearer ${gerarToken(role)}`;
         }
         const response = await fetch(`${baseUrl}${caminho}`, {
             method: metodo,
@@ -45,6 +43,70 @@ async function iniciarServidor(context) {
 
     return { requisitar };
 }
+
+test("Autorização: visitante pode consultar, mas não gravar empresas", async (context) => {
+    const { requisitar } = await iniciarServidor(context);
+
+    const { status, json } = await requisitar("/api/v1/empresas", {
+        body: { name: "Empresa Teste" },
+        role: "visitante",
+    });
+
+    assert.equal(status, 403);
+    assert.equal(json.error, "Você não tem permissão para esta operação.");
+});
+
+test("Autorização: visitante não pode criar ou administrar perfis", async (context) => {
+    const { requisitar } = await iniciarServidor(context);
+
+    const { status, json } = await requisitar("/api/v1/usuarios", {
+        role: "visitante",
+        metodo: "GET",
+    });
+
+    assert.equal(status, 403);
+    assert.equal(json.error, "Você não tem permissão para esta operação.");
+});
+
+test("Autorização: gestor não pode administrar perfis", async (context) => {
+    const { requisitar } = await iniciarServidor(context);
+
+    const { status, json } = await requisitar("/api/v1/usuarios", {
+        body: { name: "Novo usuário" },
+        role: "gestor",
+    });
+
+    assert.equal(status, 403);
+    assert.equal(json.error, "Você não tem permissão para esta operação.");
+});
+
+test("Admin: perfis novos ficam pendentes até serem autorizados", async (context) => {
+    const pendente = { id: 8, name: "Visitante Teste", email: "visitante@fibra.org.br", role: "visitante", status: "pendente" };
+    const ativo = { ...pendente, status: "ativo" };
+    context.mock.method(pool, "query", async (sql) => {
+        if (sql.includes("INSERT INTO users")) return { rows: [pendente], rowCount: 1 };
+        if (sql.includes("UPDATE users SET status = 'ativo'")) return { rows: [ativo], rowCount: 1 };
+        return { rows: [], rowCount: 0 };
+    });
+
+    const { requisitar } = await iniciarServidor(context);
+    const novo = await requisitar("/api/v1/usuarios", {
+        body: {
+            name: "Visitante Teste",
+            email: "visitante@fibra.org.br",
+            password: "senha-forte-com-12",
+            role: "visitante",
+        },
+    });
+    const autorizado = await requisitar("/api/v1/usuarios/8/autorizar");
+
+    assert.equal(novo.status, 201);
+    assert.equal(novo.json.data.status, "pendente");
+    assert.equal(novo.json.data.role, "visitante");
+    assert.equal("password" in novo.json.data, false);
+    assert.equal(autorizado.status, 200);
+    assert.equal(autorizado.json.data.status, "ativo");
+});
 
 // ============================================================================
 // 1. TESTES DE VALIDAÇÃO DE LOGIN (/api/v1/auth/login)
@@ -139,8 +201,8 @@ test("Empresas: deve rejeitar campos desconhecidos não previstos no esquema (.s
     assert.equal(json.error, "Dados inválidos.");
 });
 
-test("Empresas (Caminho Feliz): deve aceitar dados válidos e retornar 201 Created", async (context) => {
-    // Simula a resposta do banco de dados para testar apenas a camada de validação e rota
+test("Gestor: deve cadastrar manualmente uma empresa", async (context) => {
+    // Simula a resposta do banco de dados para testar a autorização e a rota
     context.mock.method(pool, "query", async () => ({
         rows: [{ id: 42, name: "Indústria Amazônia S.A.", cnpj: "12345678000199", size: "media" }],
         rowCount: 1,
@@ -149,6 +211,7 @@ test("Empresas (Caminho Feliz): deve aceitar dados válidos e retornar 201 Creat
     const { requisitar } = await iniciarServidor(context);
 
     const { status, json } = await requisitar("/api/v1/empresas", {
+        role: "gestor",
         body: {
             name: "Indústria Amazônia S.A.",
             cnpj: "12345678000199",

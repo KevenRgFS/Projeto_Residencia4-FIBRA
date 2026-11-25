@@ -6,6 +6,7 @@ const pool = require("./src/db");
 const { requireAuth, requireRole } = require("./src/auth");
 const { errorHandler } = require("./src/errors");
 const authRoutes = require("./src/routes/auth");
+const userRoutes = require("./src/routes/users");
 const companyRoutes = require("./src/routes/companies");
 const actionRoutes = require("./src/routes/actions");
 const participationRoutes = require("./src/routes/participations");
@@ -32,16 +33,17 @@ app.get("/health", async (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/usuarios", requireAuth, requireRole("admin"), userRoutes);
 app.use("/api/v1/empresas", requireAuth, companyRoutes);
 app.use("/api/v1/acoes", requireAuth, actionRoutes);
 app.use("/api/v1/participacoes", requireAuth, (req, res, next) => {
-    if (req.method === "GET" && req.path === "/") return requireRole("admin", "gestor", "analista")(req, res, next);
+    if (req.method === "GET" && req.path === "/") return requireRole("admin", "gestor", "analista", "visitante")(req, res, next);
     return next();
 }, participationRoutes);
 app.use("/api/v1/engajamento", requireAuth, engagementRoutes);
-app.use("/api/v1/dashboard", requireAuth, requireRole("admin", "gestor", "analista"), dashboardRoutes);
-app.use("/api/v1/insights", requireAuth, requireRole("admin", "gestor", "analista"), insightRoutes);
-app.use("/api/v1/interacoes", requireAuth, requireRole("admin", "gestor", "analista"), interactionRoutes);
+app.use("/api/v1/dashboard", requireAuth, requireRole("admin", "gestor", "analista", "visitante"), dashboardRoutes);
+app.use("/api/v1/insights", requireAuth, requireRole("admin", "gestor", "analista", "visitante"), insightRoutes);
+app.use("/api/v1/interacoes", requireAuth, requireRole("admin", "gestor", "analista", "visitante"), interactionRoutes);
 app.use("/api/v1/sincronizacao", requireAuth, requireRole("admin"), syncRoutes);
 
 app.use((req, res) => res.status(404).json({ error: "Rota não encontrada." }));

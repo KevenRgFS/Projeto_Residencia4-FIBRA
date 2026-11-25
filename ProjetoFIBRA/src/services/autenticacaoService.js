@@ -1,12 +1,16 @@
-const CHAVE = "fibra_usuario";
-const espera = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { requisitarApi } from "./apiService";
 
-export async function entrar(nome, senha) {
-  await espera(400);
-  if (!senha) throw new Error("Informe a senha.");
+const TOKEN_KEY = "fibra_token";
+const USER_KEY = "fibra_usuario";
 
-  sessionStorage.setItem(CHAVE, nome);
-  return { nome };
+export async function entrar(email, senha) {
+  const resposta = await requisitarApi("/auth/login", {
+    metodo: "POST",
+    corpo: { email, password: senha },
+  });
+  sessionStorage.setItem(TOKEN_KEY, resposta.token);
+  sessionStorage.setItem(USER_KEY, JSON.stringify(resposta.user));
+  return resposta.user;
 }
 
 export async function entrarComGoogle() {
@@ -14,9 +18,22 @@ export async function entrarComGoogle() {
 }
 
 export function estaLogado() {
-  return sessionStorage.getItem(CHAVE) !== null;
+  return Boolean(sessionStorage.getItem(TOKEN_KEY) && obterUsuario());
+}
+
+export function obterUsuario() {
+  const armazenado = sessionStorage.getItem(USER_KEY);
+  if (!armazenado) return null;
+
+  try {
+    return JSON.parse(armazenado);
+  } catch {
+    sair();
+    return null;
+  }
 }
 
 export function sair() {
-  sessionStorage.removeItem(CHAVE);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_KEY);
 }

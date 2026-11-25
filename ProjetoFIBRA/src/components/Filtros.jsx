@@ -33,9 +33,11 @@ export function Filtros({ onAtualizar, onCadastrar }) {
                 Atualizar Empresas
             </button>
 
-            <button type="button" className="primary-button" onClick={onCadastrar}>
-                Cadastrar empresa
-            </button>
+            {onCadastrar && (
+                <button type="button" className="primary-button" onClick={onCadastrar}>
+                    Cadastrar empresa
+                </button>
+            )}
 
             <button type="button" className="clear-button">
                 Limpar Filtros

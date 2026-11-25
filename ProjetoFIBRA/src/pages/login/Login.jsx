@@ -16,7 +16,7 @@ function GoogleLogo() {
 
 export function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ nome: "", senha: "" });
+  const [form, setForm] = useState({ email: "", senha: "" });
   const [aviso, setAviso] = useState(null);
   const [enviando, setEnviando] = useState(false);
 
@@ -30,15 +30,15 @@ export function Login() {
   async function enviar(e) {
     e.preventDefault();
 
-    if (!form.nome.trim() || !form.senha) {
-      setAviso("Preencha o nome e a senha para entrar.");
+    if (!form.email.trim() || !form.senha) {
+      setAviso("Preencha o e-mail e a senha para entrar.");
       return;
     }
 
     setEnviando(true);
     setAviso(null);
     try {
-      await entrar(form.nome.trim(), form.senha);
+      await entrar(form.email.trim(), form.senha);
       navigate("/painel", { replace: true });
     } catch (erro) {
       setAviso(erro.message);
@@ -64,13 +64,13 @@ export function Login() {
 
         <form onSubmit={enviar} noValidate>
           <label className="login-campo">
-            Nome
+            E-mail
             <input
-              type="text"
-              placeholder="Digite seu nome.."
+              type="email"
+              placeholder="Digite seu e-mail"
               autoComplete="username"
-              value={form.nome}
-              onChange={(e) => alterar("nome", e.target.value)}
+              value={form.email}
+              onChange={(e) => alterar("email", e.target.value)}
             />
           </label>
 

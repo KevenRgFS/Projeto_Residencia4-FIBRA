@@ -2,15 +2,19 @@ import {Search} from "lucide-react";
 import {Bolt} from "lucide-react";
 import {BellRing} from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { obterUsuario } from "../services/autenticacaoService";
+import { ROTULOS_PERFIL } from "../utils/perfis";
 
 const TITULOS = {
     "/painel": "Painel Geral",
     "/empresas": "Diretório de Empresas",
     "/base-de-dados": "Base de Dados",
+    "/usuarios": "Gerenciar Usuários",
 };
 export function Header(){
 
 const { pathname } = useLocation();
+const usuario = obterUsuario();
 
 return(
 
@@ -37,8 +41,8 @@ return(
             <button className="icon-button"><BellRing className="i-icons"/></button>
 
             <div className="user">
-                <strong>Roberto Silva</strong>
-                <small>Analista Sênior</small>
+                <strong>{usuario?.name || "Usuário"}</strong>
+                <small>{ROTULOS_PERFIL[usuario?.role] || "Perfil"}</small>
             </div>
 
         </div>

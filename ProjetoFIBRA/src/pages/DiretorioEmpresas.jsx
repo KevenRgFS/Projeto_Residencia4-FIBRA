@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Filtros } from "../components/Filtros";
 import { Table } from "../components/Table";
 import { cadastrarEmpresa, listarEmpresas } from "../services/baseDadosService";
+import { obterUsuario } from "../services/autenticacaoService";
 
 export function DiretorioEmpresas() {
+  const podeCadastrar = ["admin", "gestor", "analista"].includes(obterUsuario()?.role);
   const [empresas, setEmpresas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [cadastroAberto, setCadastroAberto] = useState(false);
@@ -66,11 +68,11 @@ export function DiretorioEmpresas() {
     <>
       <Filtros
         onAtualizar={atualizarEmpresas}
-        onCadastrar={() => {
+        onCadastrar={podeCadastrar ? () => {
           setErro("");
           setMensagem("");
           setCadastroAberto(true);
-        }}
+        } : undefined}
       />
       {mensagem && <p className="empresa-feedback" role="status">{mensagem}</p>}
       {erro && <p className="empresa-feedback empresa-feedback-erro" role="alert">{erro}</p>}

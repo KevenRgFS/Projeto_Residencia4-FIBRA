@@ -7,12 +7,12 @@ API REST em Express e PostgreSQL para empresas, ações, participações, intera
 1. Instale uma instância PostgreSQL e crie um banco vazio.
 2. Copie `.env.example` para `.env` e preencha `DATABASE_URL` e `JWT_SECRET`.
 3. Na pasta `backend`, rode `npm install` e `npm run migrate`.
-4. Crie o primeiro usuário definindo `USER_NAME`, `USER_EMAIL` e `USER_PASSWORD` no ambiente e rode `npm run create-user`. A senha precisa ter pelo menos 12 caracteres. Para perfil `empresa`, informe também `USER_COMPANY_ID`.
+4. Crie o primeiro usuário definindo `USER_NAME`, `USER_EMAIL` e `USER_PASSWORD` no ambiente e rode `npm run create-user`. Esse comando cria exclusivamente o administrador-chefe inicial; a senha precisa ter pelo menos 12 caracteres. Os demais usuários são criados e autorizados pelo painel do administrador.
 5. Rode `npm run dev`. A API fica em `http://localhost:3000`; `GET /health` verifica banco e serviço.
 
 ## Autenticação e perfis
 
-`POST /api/v1/auth/login` recebe `email` e `password` e devolve um JWT Bearer com validade de 8 horas. Rotas de negócio exigem esse token. Os perfis `admin`, `gestor` e `analista` têm acesso conforme a operação; `empresa` só pode consultar a própria organização e não acessa painel consolidado.
+`POST /api/v1/auth/login` recebe `email` e `password` e devolve um JWT Bearer com validade de 8 horas. Rotas de negócio exigem esse token. O administrador-chefe gerencia os usuários em `/api/v1/usuarios`: novos perfis ficam pendentes até serem autorizados. `visitante` consulta gráficos e informações, sem permissão para gravar dados; `gestor` pode importar planilhas e cadastrar/alterar dados; `analista` mantém as permissões operacionais existentes; `empresa` só pode consultar a própria organização.
 
 ## Rotas
 
@@ -26,6 +26,8 @@ API REST em Express e PostgreSQL para empresas, ações, participações, intera
 - `GET /api/v1/dashboard/overview`, com filtros de data `inicio` e `fim`.
 - `GET /api/v1/insights` devolve alertas de alto potencial sem participação nos últimos seis meses e pendências de qualidade de dados.
 - `GET /api/v1/sincronizacao` e `POST /api/v1/sincronizacao/hubspot` (admin).
+- `GET|POST /api/v1/usuarios` (admin) lista e cria usuários pendentes; `POST /api/v1/usuarios/:id/autorizar` libera o acesso e `POST /api/v1/usuarios/:id/revogar` desativa uma conta.
+- `POST /api/v1/empresas/importacao` recebe planilha XLSX ou CSV e grava as empresas no PostgreSQL configurado em `DATABASE_URL`.
 
 Exemplo de participação:
 

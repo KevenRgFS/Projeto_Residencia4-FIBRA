@@ -1,0 +1,137 @@
+.usuarios {
+  display: grid;
+  gap: 18px;
+  color: #263445;
+}
+
+.usuarios-cabecalho h2 {
+  margin-bottom: 5px;
+  color: #1c3155;
+  font-size: 20px;
+}
+
+.usuarios-cabecalho p,
+.usuarios-lista > p {
+  color: #687387;
+  font-size: 13px;
+}
+
+.usuarios-formulario,
+.usuarios-lista {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #dce2e9;
+  border-radius: 14px;
+}
+
+.usuarios-formulario h3,
+.usuarios-lista h3 {
+  color: #1c3155;
+  font-size: 16px;
+}
+
+.usuarios-campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+.usuarios-campos label {
+  display: grid;
+  gap: 6px;
+  color: #526074;
+  font-size: 12px;
+}
+
+.usuarios-campos input,
+.usuarios-campos select {
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.usuarios-botao {
+  width: fit-content;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  background: #fff;
+  color: #344054;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.usuarios-botao.primario {
+  border-color: #16418f;
+  background: #16418f;
+  color: #fff;
+}
+
+.usuarios-botao:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.usuarios-aviso {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.usuarios-aviso.erro {
+  background: #fff0ed;
+  color: #b42318;
+}
+
+.usuarios-aviso.ok {
+  background: #e8f6e5;
+  color: #28691b;
+}
+
+.usuarios-tabela-conteudo {
+  display: grid;
+}
+
+.usuario-linha {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.5fr) minmax(130px, 1fr) 100px auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #e6ebf0;
+  font-size: 12px;
+}
+
+.usuario-identificacao {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.usuario-identificacao span {
+  overflow: hidden;
+  color: #687387;
+  text-overflow: ellipsis;
+}
+
+.usuario-status {
+  color: #687387;
+}
+
+.usuario-status.ativo { color: #2f7d1a; }
+.usuario-status.pendente { color: #b54708; }
+.usuario-sem-acao { text-align: center; }
+
+@media (max-width: 700px) {
+  .usuario-linha {
+    grid-template-columns: 1fr 1fr;
+  }
+}

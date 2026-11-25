@@ -1,8 +1,8 @@
-import test from "node:test";
+﻿import test from "node:test";
 import assert from "node:assert/strict";
 import { validarArquivo, formatarTamanho, TAMANHO_MAXIMO_MB } from "./arquivos.js";
 
-test("Upload: deve aceitar arquivos com extensões permitidas (PDF, DOCX, XLSX, CSV) até 25 MB", () => {
+test("Upload: aceita arquivos XLSX e CSV de até 5 MB", () => {
     const arquivoValido = {
         name: "relatorio_empresas.xlsx",
         size: 5 * 1024 * 1024, // 5 MB
@@ -12,7 +12,7 @@ test("Upload: deve aceitar arquivos com extensões permitidas (PDF, DOCX, XLSX, 
     assert.equal(erro, null);
 });
 
-test("Upload: deve rejeitar arquivos com extensão não permitida (.exe, .png, .txt)", () => {
+test("Upload: rejeita arquivos com extensão não permitida (.exe, .png, .txt)", () => {
     const arquivoInvalido = {
         name: "script_malicioso.exe",
         size: 1024,
@@ -21,20 +21,20 @@ test("Upload: deve rejeitar arquivos com extensão não permitida (.exe, .png, .
     const erro = validarArquivo(arquivoInvalido);
     assert.equal(
         erro,
-        '"script_malicioso.exe": formato não aceito (use PDF, DOCX, XLSX ou CSV).'
+        '"script_malicioso.exe": formato não aceito (use XLSX ou CSV).'
     );
 });
 
-test("Upload: deve rejeitar arquivos que ultrapassam o limite de 25 MB", () => {
+test("Upload: rejeita arquivos que ultrapassam o limite de 5 MB", () => {
     const arquivoMuitoGrande = {
         name: "base_completa.csv",
-        size: (TAMANHO_MAXIMO_MB + 1) * 1024 * 1024, // 26 MB
+        size: (TAMANHO_MAXIMO_MB + 1) * 1024 * 1024, // 6 MB
     };
 
     const erro = validarArquivo(arquivoMuitoGrande);
     assert.equal(erro, `"base_completa.csv": passa de ${TAMANHO_MAXIMO_MB} MB.`);
 });
 
-test("Formatação: deve formatar tamanhos em KB corretamente", () => {
+test("Formatação: formata tamanhos em KB corretamente", () => {
     assert.equal(formatarTamanho(512 * 1024), "512 KB");
 });

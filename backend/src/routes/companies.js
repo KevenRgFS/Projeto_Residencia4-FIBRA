@@ -4,8 +4,11 @@ const pool = require("../db");
 const { AppError, asyncRoute } = require("../errors");
 const { requireRole } = require("../auth");
 const { recordAudit } = require("../audit");
+const multer = require("multer");
+const XLSX = require("xlsx");
 
 const router = express.Router();
+const spreadsheetUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 1 } });
 const companySchema = z.object({
     name: z.string().trim().min(1).max(160),
     legalName: z.string().trim().max(200).nullable().optional(),
@@ -31,6 +34,52 @@ const columns = {
     employeeCount: "employee_count", registrationStatus: "registration_status", potential: "potential",
 };
 
+const importHeaders = {
+    nome: "name", name: "name", razao_social: "legalName", legal_name: "legalName",
+    cnpj: "cnpj", cnae: "cnae", descricao_cnae: "cnaeDescription", cnae_description: "cnaeDescription",
+    telefone: "phone", phone: "phone", email: "email", responsavel: "responsible", responsible: "responsible",
+    setor: "sector", sector: "sector", porte: "size", size: "size", tipo: "organizationType", organization_type: "organizationType",
+    sindicato: "unionName", union_name: "unionName", funcionarios: "employeeCount", employee_count: "employeeCount",
+    situacao: "registrationStatus", registration_status: "registrationStatus", potencial: "potential",
+};
+
+function normalizeHeader(value) {
+    return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+}
+
+function parseSpreadsheet(file) {
+    const extension = file.originalname.toLowerCase().split(".").pop();
+    if (!["xlsx", "csv"].includes(extension)) throw new AppError(400, "Formato inválido. Envie um arquivo XLSX ou CSV.");
+    let workbook;
+    try {
+        workbook = XLSX.read(file.buffer, { type: "buffer", raw: false, cellDates: false });
+    } catch {
+        throw new AppError(400, "Não foi possível ler a planilha. Verifique o arquivo e tente novamente.");
+    }
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+    if (!firstSheet) throw new AppError(400, "A planilha está vazia.");
+    const sourceRows = XLSX.utils.sheet_to_json(firstSheet, { defval: "", raw: false });
+    if (!sourceRows.length) throw new AppError(400, "A planilha não contém linhas de dados.");
+    return sourceRows.map((source, index) => {
+        const company = {};
+        for (const [header, value] of Object.entries(source)) {
+            const field = importHeaders[normalizeHeader(header)];
+            if (field && String(value).trim() !== "") company[field] = String(value).trim();
+        }
+        if (company.cnpj) company.cnpj = company.cnpj.replace(/\D/g, "");
+        if (company.employeeCount !== undefined) company.employeeCount = Number(company.employeeCount);
+        for (const field of ["size", "organizationType", "potential"]) {
+            if (company[field]) company[field] = normalizeHeader(company[field]);
+        }
+        if (company.size === "medio") company.size = "media";
+        if (!company.name && company.legalName) company.name = company.legalName;
+        if (!company.legalName && company.name) company.legalName = company.name;
+        const parsed = companySchema.safeParse(company);
+        if (!parsed.success) throw new AppError(400, `Linha ${index + 2}: confira nome, CNPJ e demais campos.`);
+        return parsed.data;
+    });
+}
+
 function assertCompanyScope(req, companyId) {
     if (req.user.role === "empresa" && Number(req.user.companyId) !== Number(companyId)) {
         throw new AppError(403, "Você só pode acessar os dados da sua organização.");
@@ -50,6 +99,41 @@ router.get("/duplicates", requireRole("admin"), asyncRoute(async (req, res) => {
          ) ORDER BY a.name LIMIT 200`
     );
     res.json({ data: result.rows });
+}));
+
+router.post("/importacao", requireRole("admin", "gestor", "analista"), (req, res, next) => {
+    spreadsheetUpload.single("arquivo")(req, res, (error) => {
+        if (error) return next(new AppError(error.code === "LIMIT_FILE_SIZE" ? 413 : 400, "Envie um único arquivo XLSX ou CSV de até 5 MB."));
+        next();
+    });
+}, asyncRoute(async (req, res) => {
+    if (!req.file) throw new AppError(400, "Selecione um arquivo XLSX ou CSV.");
+    const companies = parseSpreadsheet(req.file);
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        for (const company of companies) {
+            const keys = Object.keys(company);
+            const values = keys.map((key) => company[key]);
+            const fields = keys.map((key) => columns[key]);
+            const updateFields = keys.filter((key) => key !== "cnpj").map((key) => `${columns[key]} = EXCLUDED.${columns[key]}`);
+            const conflict = company.cnpj
+                ? ` ON CONFLICT (cnpj) DO UPDATE SET ${[...updateFields, "updated_at = NOW()"].join(", ")}`
+                : "";
+            await client.query(
+                `INSERT INTO companies (${fields.join(", ")}) VALUES (${values.map((_, index) => `$${index + 1}`).join(", ")})${conflict}`,
+                values
+            );
+        }
+        await recordAudit(req, "company.import", "company", null, { records: companies.length });
+        await client.query("COMMIT");
+        res.status(201).json({ message: "Planilha importada com sucesso.", imported: companies.length });
+    } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+    } finally {
+        client.release();
+    }
 }));
 
 router.get("/", asyncRoute(async (req, res) => {

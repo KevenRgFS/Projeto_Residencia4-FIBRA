@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash TEXT NOT NULL,
     phone VARCHAR(20),
     job_title VARCHAR(100),
-    role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'gestor', 'analista', 'empresa')),
-    status VARCHAR(20) NOT NULL DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo', 'suspenso')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'gestor', 'analista', 'empresa', 'visitante')),
+    status VARCHAR(20) NOT NULL DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo', 'suspenso', 'pendente')),
     last_access_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -36,6 +36,10 @@ CREATE TABLE IF NOT EXISTS companies (
 );
 
 ALTER TABLE users ADD COLUMN IF NOT EXISTS company_id BIGINT REFERENCES companies(id) ON DELETE SET NULL;
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
+ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin', 'gestor', 'analista', 'empresa', 'visitante'));
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_status_check;
+ALTER TABLE users ADD CONSTRAINT users_status_check CHECK (status IN ('ativo', 'inativo', 'suspenso', 'pendente'));
 
 CREATE TABLE IF NOT EXISTS company_addresses (
     id BIGSERIAL PRIMARY KEY,

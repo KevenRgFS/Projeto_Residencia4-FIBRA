@@ -1,118 +1,79 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AreaUpload } from "./AreaUpload";
-import { ClassificacaoEnvio } from "./ClassificacaoEnvio";
-import { FilaProcessamento } from "./FilaProcessamento";
-import { classificacaoInicial } from "../../data/baseDeDados";
 import { validarArquivo } from "../../utils/arquivos";
-import {
-  listarFila,
-  listarEmpresas,
-  enviarArquivo,
-  processarItens,
-  limparFila,
-} from "../../services/baseDadosService";
-import "./BasedeDados.css";
+import { enviarArquivoApi, requisitarApi } from "../../services/apiService";
+import "./BaseDeDados.css";
 
 const ABAS = [
-  { id: "upload", rotulo: "Upload de arquivos" },
+  { id: "upload", rotulo: "Upload de planilha" },
   { id: "manual", rotulo: "Entrada manual" },
-  { id: "externa", rotulo: "Conectar fonte externa" },
 ];
+
+const EMPRESA_INICIAL = {
+  name: "",
+  legalName: "",
+  cnpj: "",
+  sector: "",
+  size: "",
+  organizationType: "",
+  employeeCount: "",
+};
 
 export function BasedeDados() {
   const [aba, setAba] = useState("upload");
-  const [classificacao, setClassificacao] = useState(classificacaoInicial);
-  const [fila, setFila] = useState([]);
-  const [empresas, setEmpresas] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [processando, setProcessando] = useState(false);
-  const [erros, setErros] = useState([]);
+  const [empresa, setEmpresa] = useState(EMPRESA_INICIAL);
+  const [enviando, setEnviando] = useState(false);
+  const [aviso, setAviso] = useState(null);
 
-  // Ao abrir a página, aqui se fará uma busca a fila no serviço (hoje: dados de exemplo).
-  useEffect(() => {
-    let ativo = true;
-    listarFila()
-      .then((itens) => {
-        if (ativo) setFila(itens);
-      })
-      .catch((e) => {
-        if (ativo) setErros([e.message]);
-      })
-      .finally(() => {
-        if (ativo) setCarregando(false);
-      });
-    return () => { ativo = false; };
-  }, []);
-
-  // Busca as empresas para o campo "Empresa vinculada".
-  useEffect(() => {
-    let ativo = true;
-    listarEmpresas()
-      .then((lista) => {
-        if (ativo) setEmpresas(lista);
-      })
-      .catch((e) => {
-        if (ativo) setErros((atual) => [...atual, e.message]);
-      });
-    return () => { ativo = false; };
-  }, []);
-
-  // Itens que ainda vão ser processados, sendo novos ou que deram erro.
-  const pendentes = fila.filter((i) => i.status === "na_fila" || i.status === "erro");
-
-  function mudarClassificacao(campo, valor) {
-    setClassificacao((atual) => ({ ...atual, [campo]: valor }));
-  }
-
-  // Troca um item da fila pela versão atualizada.
-  function atualizarItem(itemNovo) {
-    setFila((atual) => atual.map((i) => (i.id === itemNovo.id ? itemNovo : i)));
-  }
-
-  async function receberArquivos(arquivos) {
-    const mensagens = [];
-    const validos = [];
-
-    arquivos.forEach((arquivo) => {
+  async function importarPlanilhas(arquivos) {
+    setAviso(null);
+    for (const arquivo of arquivos) {
       const erro = validarArquivo(arquivo);
-      if (erro) mensagens.push(erro);
-      else validos.push(arquivo);
-    });
-    setErros(mensagens);
+      if (erro) {
+        setAviso({ tipo: "erro", texto: erro });
+        continue;
+      }
 
-    const nomeEmpresa = empresas.find((e) => String(e.id) === classificacao.empresaId)?.nome;
-    for (const arquivo of validos) {
+      setEnviando(true);
       try {
-        const item = await enviarArquivo(arquivo, { ...classificacao, nomeEmpresa });
-        setFila((atual) => [...atual, item]);
-      } catch (e) {
-        mensagens.push(e.message);
-        setErros([...mensagens]);
+        const resultado = await enviarArquivoApi("/empresas/importacao", arquivo);
+        setAviso({
+          tipo: "ok",
+          texto: `${arquivo.name}: ${resultado.imported} registros importados.`,
+        });
+      } catch (erroImportacao) {
+        setAviso({ tipo: "erro", texto: `${arquivo.name}: ${erroImportacao.message}` });
+      } finally {
+        setEnviando(false);
       }
     }
   }
 
-  async function processar() {
-    setProcessando(true);
-    setErros([]);
+  async function cadastrarEmpresa(evento) {
+    evento.preventDefault();
+    setEnviando(true);
+    setAviso(null);
+    const dados = { ...empresa };
+    for (const campo of ["legalName", "cnpj", "sector", "size", "organizationType"]) {
+      if (!dados[campo]) delete dados[campo];
+    }
+    if (dados.employeeCount === "") delete dados.employeeCount;
+    else dados.employeeCount = Number(dados.employeeCount);
+
     try {
-      await processarItens(pendentes.map((i) => i.id), atualizarItem);
-    } catch (e) {
-      setErros([e.message]);
+      await requisitarApi("/empresas", { metodo: "POST", corpo: dados });
+      setEmpresa(EMPRESA_INICIAL);
+      setAviso({ tipo: "ok", texto: "Empresa cadastrada com sucesso." });
+    } catch (erro) {
+      setAviso({ tipo: "erro", texto: erro.message });
     } finally {
-      setProcessando(false);
+      setEnviando(false);
     }
   }
 
-  async function limpar() {
-    try {
-      setFila(await limparFila());
-    } catch (e) {
-      setErros([e.message]);
-    }
+  function alterarEmpresa(campo, valor) {
+    setEmpresa((atual) => ({ ...atual, [campo]: valor }));
   }
-
-  const qtd = pendentes.length;
 
   return (
     <section className="base-dados">
@@ -120,57 +81,84 @@ export function BasedeDados() {
         <header className="base-dados-topo">
           <div>
             <h2>Alimentar a Base de Dados</h2>
-            <p>Envie documentos, planilhas ou registros manuais para gerar diagnósticos e recomendações do Hub.</p>
-          </div>
-
-          <div className="base-dados-acoes">
-            {/* TODO: abrir a tela/modal de histórico de envios */}
-            <button type="button" className="botao-contorno">Ver histórico</button>
-            <button
-              type="button"
-              className="botao-primario"
-              disabled={qtd === 0 || processando}
-              onClick={processar}
-            >
-              Processar {qtd} {qtd === 1 ? "item" : "itens"}
-            </button>
+            <p>Importe empresas por planilha ou cadastre os dados manualmente.</p>
           </div>
         </header>
 
-        <div className="abas">
+        <div className="abas" role="tablist" aria-label="Forma de inserção">
           {ABAS.map((item) => (
             <button
               key={item.id}
               type="button"
+              role="tab"
+              aria-selected={aba === item.id}
               className={`aba ${aba === item.id ? "ativa" : ""}`}
-              onClick={() => setAba(item.id)}
+              onClick={() => { setAba(item.id); setAviso(null); }}
             >
               {item.rotulo}
             </button>
           ))}
         </div>
 
-        <div className="base-dados-corpo">
-          {aba === "upload" ? (
-            <div className="coluna-envio">
-              <AreaUpload onArquivos={receberArquivos} desabilitado={processando} />
+        {aviso && <p className={`aviso-base-dados ${aviso.tipo}`} role="alert">{aviso.texto}</p>}
 
-              {erros.length > 0 && (
-                <ul className="erros-upload">
-                  {erros.map((erro) => <li key={erro}>{erro}</li>)}
-                </ul>
-              )}
-
-              <ClassificacaoEnvio empresas={empresas} valores={classificacao} onChange={mudarClassificacao} />
-            </div>
-          ) : (
-            <div className="coluna-envio aba-vazia">
-              Esta aba ainda será construída.
-            </div>
-          )}
-
-          <FilaProcessamento itens={fila} carregando={carregando} onLimpar={limpar} />
-        </div>
+        {aba === "upload" ? (
+          <div className="coluna-envio">
+            <AreaUpload onArquivos={importarPlanilhas} desabilitado={enviando} />
+            <p className="ajuda-base-dados">
+              A planilha deve ter uma linha de cabeçalho com nome, CNPJ, setor e demais campos da empresa.
+              São aceitos arquivos XLSX e CSV de até 5 MB.
+            </p>
+          </div>
+        ) : (
+          <form className="cadastro-manual" onSubmit={cadastrarEmpresa}>
+            <label>
+              Nome da empresa *
+              <input required maxLength="160" value={empresa.name} onChange={(e) => alterarEmpresa("name", e.target.value)} />
+            </label>
+            <label>
+              Razão social
+              <input maxLength="200" value={empresa.legalName} onChange={(e) => alterarEmpresa("legalName", e.target.value)} />
+            </label>
+            <label>
+              CNPJ (14 dígitos)
+              <input inputMode="numeric" pattern="[0-9]{14}" maxLength="14" value={empresa.cnpj} onChange={(e) => alterarEmpresa("cnpj", e.target.value)} />
+            </label>
+            <label>
+              Setor
+              <input maxLength="100" value={empresa.sector} onChange={(e) => alterarEmpresa("sector", e.target.value)} />
+            </label>
+            <label>
+              Porte
+              <select value={empresa.size} onChange={(e) => alterarEmpresa("size", e.target.value)}>
+                <option value="">Selecione</option>
+                <option value="mei">MEI</option>
+                <option value="micro">Micro</option>
+                <option value="pequena">Pequena</option>
+                <option value="media">Média</option>
+                <option value="grande">Grande</option>
+              </select>
+            </label>
+            <label>
+              Tipo de organização
+              <select value={empresa.organizationType} onChange={(e) => alterarEmpresa("organizationType", e.target.value)}>
+                <option value="">Selecione</option>
+                <option value="empresa">Empresa</option>
+                <option value="startup">Startup</option>
+                <option value="governo">Governo</option>
+                <option value="academia">Academia</option>
+                <option value="servicos">Serviços</option>
+              </select>
+            </label>
+            <label>
+              Número de funcionários
+              <input type="number" min="0" step="1" value={empresa.employeeCount} onChange={(e) => alterarEmpresa("employeeCount", e.target.value)} />
+            </label>
+            <button type="submit" className="botao-primario" disabled={enviando}>
+              {enviando ? "Salvando..." : "Cadastrar empresa"}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );

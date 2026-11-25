@@ -14,6 +14,7 @@ export function AreaUpload({ onArquivos, desabilitado }) {
   }
 
   function aoEscolher(evento) {
+    if (desabilitado) return;
     onArquivos(Array.from(evento.target.files));
     evento.target.value = ""; 
   }
@@ -24,7 +25,7 @@ export function AreaUpload({ onArquivos, desabilitado }) {
       onDragOver={(e) => { e.preventDefault(); setArrastando(true); }}
       onDragLeave={() => setArrastando(false)}
       onDrop={aoSoltar}
-      onClick={() => inputRef.current?.click()}
+      onClick={() => { if (!desabilitado) inputRef.current?.click(); }}
     >
       <span className="area-upload-icone">
         <Triangle size={14} fill="currentColor" />
@@ -49,6 +50,7 @@ export function AreaUpload({ onArquivos, desabilitado }) {
         ref={inputRef}
         type="file"
         multiple
+        disabled={desabilitado}
         hidden
         accept={EXTENSOES_PERMITIDAS.map((e) => `.${e}`).join(",")}
         onChange={aoEscolher}

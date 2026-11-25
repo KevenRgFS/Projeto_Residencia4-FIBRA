@@ -194,6 +194,60 @@
   color: var(--laranja);
 }
 
+.aviso-base-dados {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.aviso-base-dados.erro {
+  background: #fff0ed;
+  color: #b42318;
+}
+
+.aviso-base-dados.ok {
+  background: #e8f6e5;
+  color: #28691b;
+}
+
+.ajuda-base-dados {
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cadastro-manual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  align-items: end;
+  gap: 14px;
+}
+
+.cadastro-manual label {
+  display: grid;
+  gap: 6px;
+  color: #586579;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cadastro-manual input,
+.cadastro-manual select {
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: #f4f6f8;
+  font: inherit;
+  font-size: 12px;
+}
+
+.cadastro-manual button {
+  min-height: 34px;
+}
+
 /* ---------- Classificação ---------- */
 .classificacao h3 {
   margin: 0 0 12px;
