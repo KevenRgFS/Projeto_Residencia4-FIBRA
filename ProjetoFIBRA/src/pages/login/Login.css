@@ -92,6 +92,26 @@
   color: #b83a0a;
 }
 
+.login-instrucao-senha {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #cfe3ee;
+  border-radius: 8px;
+  background: #f2f9fc;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #344054;
+}
+
+.login-instrucao-senha strong {
+  color: #1b2a4e;
+}
+
+.login-instrucao-senha ol {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
 /* ---------- botões ---------- */
 .login-google {
   display: flex;

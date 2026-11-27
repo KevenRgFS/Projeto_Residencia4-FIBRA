@@ -19,6 +19,7 @@ export function Login() {
   const [form, setForm] = useState({ nome: "", senha: "" });
   const [aviso, setAviso] = useState(null);
   const [enviando, setEnviando] = useState(false);
+  const [mostrarInstrucaoSenha, setMostrarInstrucaoSenha] = useState(false);
 
   // quem já está logado vai direto para o painel
   if (estaLogado()) return <Navigate to="/painel" replace />;
@@ -88,10 +89,23 @@ export function Login() {
           <button
             type="button"
             className="login-link"
-            onClick={() => setAviso("A recuperação de senha ainda não está disponível.")}
+            aria-expanded={mostrarInstrucaoSenha}
+            aria-controls="instrucao-esquecimento-senha"
+            onClick={() => setMostrarInstrucaoSenha((mostrar) => !mostrar)}
           >
             Esqueceu a senha?
           </button>
+
+          {mostrarInstrucaoSenha && (
+            <div className="login-instrucao-senha" id="instrucao-esquecimento-senha" role="note">
+              <strong>Como recuperar seu acesso</strong>
+              <ol>
+                <li>Entre em contato com o administrador-chefe do sistema.</li>
+                <li>Informe o e-mail cadastrado na sua conta.</li>
+                <li>Não compartilhe sua senha atual. A recuperação automática por e-mail ainda não está disponível.</li>
+              </ol>
+            </div>
+          )}
 
           {aviso && <p className="login-aviso" role="alert">{aviso}</p>}
 
